@@ -1,21 +1,35 @@
-module "roboshop" {
-  source = "../../terraform-aws-vpc"
-  # source = "git::https://github.com/joindevops1/terraform-aws-vpc.git?ref=main"
-  project_name = var.project_name
-  environment = var.environment
-  common_tags = var.common_tags
-  vpc_tags = var.vpc_tags
+resource "aws_acm_certificate" "rajesh76" {
+  domain_name       = "*.rajesh76.online"
+  validation_method = "DNS"
 
-  # public subnet
-  public_subnets_cidr = var.public_subnets_cidr
+  tags = merge(
+    var.tags,
+    var.common_tags
+  )
 
-  # private subnet
-  private_subnets_cidr = var.private_subnets_cidr
+  lifecycle {
+    create_before_destroy = true
+  }
+}
 
-  # database subnet
-  database_subnets_cidr = var.database_subnets_cidr
+resource "aws_route53_record" "rajesh76" {
+  for_each = {
+    for dvo in aws_acm_certificate.rajesh76.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
 
-  #peering
-  is_peering_required = var.is_peering_required
+  allow_overwrite = true
+  name            = each.value.name
+  records         = [each.value.record]
+  ttl             = 1
+  type            = each.value.type
+  zone_id         = data.aws_route53_zone.rajesh76.zone_id
+}
 
+resource "aws_acm_certificate_validation" "rajesh76" {
+  certificate_arn         = aws_acm_certificate.rajesh76.arn
+  validation_record_fqdns = [for record in aws_route53_record.rajesh76 : record.fqdn]
 }

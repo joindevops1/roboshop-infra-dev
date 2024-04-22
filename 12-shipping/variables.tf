@@ -1,14 +1,14 @@
 variable "common_tags" {
   default = {
-    project = "roboshop"
-    environment = "dev"
-    terraform = "true"
+    Project     = "roboshop"
+    Environment = "dev"
+    Terraform   = "true"
   }
 }
 
 variable "tags" {
   default = {
-    Component = "acm"
+    Component = "shipping"
   }
 }
 
@@ -16,9 +16,12 @@ variable "project_name" {
   default = "roboshop"
 }
 variable "environment" {
-   default = "dev"   
+  default = "dev"
 }
 
 variable "zone_name" {
   default = "rajesh76.online"
+}
+variable "iam_instance_profile" {
+  default = "ShellScriptRoleForRoboshop"
 }

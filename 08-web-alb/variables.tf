@@ -8,7 +8,7 @@ variable "common_tags" {
 
 variable "tags" {
   default = {
-    Component = "acm"
+    Component = "web-alb"
   }
 }
 
