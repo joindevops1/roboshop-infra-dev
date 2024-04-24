@@ -34,9 +34,11 @@ pipeline {
             }
         }
         stage('Deploy') {
-            when {   
-                "${params.action}" == 'apply' 
-            } 
+            when {
+                expression { 
+                    params.action == 'apply'
+                }
+            }
             input {
                 message "Should we continue?"
                 ok "Yes, we should."
