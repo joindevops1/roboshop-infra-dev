@@ -1,35 +1,32 @@
 pipeline {
     agent {
-       node {
-          label 'AGENT-2'
+        node {
+            label 'AGENT-1'
         }
     }
-    
     options {
         ansiColor('xterm')
-        // timeout(time: 1, unit: 'HOURS') 
+        // timeout(time: 1, unit: 'HOURS')
         // disableConcurrentBuilds()
-        
     }
-    
     parameters {
-        choice(name: 'action', choices: ['apply', 'destroy',], description: 'Pick something')
+        choice(name: 'action', choices: ['apply', 'destroy'], description: 'Pick something')
     }
     // build
     stages {
         stage('Init') {
             steps {
                 sh """
-                   cd 01-vpc
-                   terraform init -reconfigure
+                    cd 01-vpc
+                    terraform init -reconfigure
                 """
             }
         }
-        stage('plan') {
+        stage('Plan') {
             steps {
                 sh """
-                   cd 01-vpc
-                   terraform plan
+                    cd 01-vpc
+                    terraform plan
                 """
             }
         }
@@ -49,15 +46,12 @@ pipeline {
             }
             steps {
                 sh """
-                   cd 01-vpc
-                   terraform apply -auto-approve
+                    cd 01-vpc
+                    terraform apply -auto-approve
                 """
             }
         }
-        
-    }
-
-    stage('Destroy') {
+        stage('Destroy') {
             when {
                 expression { 
                     params.action == 'destroy'
@@ -73,12 +67,11 @@ pipeline {
             }
             steps {
                 sh """
-                   cd 01-vpc
-                   terraform destroy -auto-approve
+                    cd 01-vpc
+                    terraform destroy -auto-approve
                 """
             }
         }
-        
     }
     // post build
     post { 
@@ -86,9 +79,9 @@ pipeline {
             echo 'I will always say Hello again!'
         }
         failure { 
-            echo 'this runs when pipeline is failed used generally to send some alerts'
+            echo 'this runs when pipeline is failed, used generally to send some alerts'
         }
-        success { 
+        success{
             echo 'I will say Hello when pipeline is success'
         }
     }
