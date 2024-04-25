@@ -1,7 +1,7 @@
 pipeline {
     agent {
         node {
-            label 'AGENT-1'
+            label 'AGENT-2'
         }
     }
     options {
@@ -10,6 +10,7 @@ pipeline {
         // disableConcurrentBuilds()
     }
     parameters {
+        string(name: 'component', defaultValue: 'vpc', description: 'Which component to run?')
         choice(name: 'action', choices: ['apply', 'destroy'], description: 'Pick something')
     }
     // build
@@ -17,7 +18,7 @@ pipeline {
         stage('Init') {
             steps {
                 sh """
-                    cd 01-vpc
+                    cd ${param.component}
                     terraform init -reconfigure
                 """
             }
@@ -25,7 +26,7 @@ pipeline {
         stage('Plan') {
             steps {
                 sh """
-                    cd 01-vpc
+                    cd ${param.component}
                     terraform plan
                 """
             }
@@ -46,7 +47,7 @@ pipeline {
             }
             steps {
                 sh """
-                    cd 01-vpc
+                    cd ${param.component}
                     terraform apply -auto-approve
                 """
             }
@@ -67,7 +68,7 @@ pipeline {
             }
             steps {
                 sh """
-                    cd 01-vpc
+                    cd ${param.component}
                     terraform destroy -auto-approve
                 """
             }
