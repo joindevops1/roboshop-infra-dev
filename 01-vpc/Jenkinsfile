@@ -13,7 +13,7 @@ pipeline {
     //     string(name: 'component', defaultValue: 'vpc', description: 'Which component to run?')
     //     choice(name: 'action', choices: ['apply', 'destroy'], description: 'Pick something')
     // }
-    // build
+    build
     stages {
         stage('Init') {
             steps {
