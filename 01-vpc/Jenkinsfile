@@ -68,7 +68,7 @@ pipeline {
             }
             steps {
                 sh """
-                    cd ${params.component}
+                    cd 01-vpc
                     terraform destroy -auto-approve
                 """
             }
