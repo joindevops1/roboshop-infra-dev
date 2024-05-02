@@ -119,7 +119,7 @@ module "app_alb" {
 }
 
 module "web_alb" {
-  source         = https://github.com/joindevops1/terraform-aws-security-group.git
+  source         = "git::https://github.com/joindevops1/terraform-aws-security-group.git?ref=main"
   project_name   = var.project_name
   environment    = var.environment
   sg_description = "SG for Web ALB"
